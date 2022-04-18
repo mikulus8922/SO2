@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# Systemy operacyjne 2 – laboratorium nr 6
+#
+# Celem zajęć jest zapoznanie się z możliwościami narzędzia awk.
+#
+# Tradycyjnie nie przywiązujemy zbyt dużej wagi do środowiska roboczego.
+# Zakładamy, że format i układ danych w podanych plikach nie ulega zmianie,
+# ale same wartości, inne niż podane wprost w treści zadań, mogą ulec zmianie,
+# a przygotowane zadania wciąż powinny działać poprawnie (robić to, co trzeba).
+#
+# Wszystkie chwyty dozwolone, ale w wyniku ma powstać tylko to, o czym jest
+# mowa w treści zadania – nie generujemy żadnych dodatkowych plików pośrednich.
+# Większość rozwiązań powinno sprowadzić się do jednego, zmyślnego wywołania
+# programu `awk` z odpowiednimi argumentami.
+#
+
+#
+# Zadanie 8.
+# Plik `dodatkowe/lipsum.txt` zawiera przykładowy tekst z generatora
+# http://lipsum.pl/. Używając programu awk, proszę przygotować narzędzie,
+# które rozbije tekst w podanym pliku wejściowym w taki sposób, aby każda
+# linia miała mniej niż 80 znaków (przy czym staramy się zmaksymalizować
+# liczbę znaków w każdej linii jak to możliwe). Jako wynik programu wyświetlić
+# tekst po przekształceniu.
+#
+
+awk -F " " '{
+    line = $1;
+    for (i = 2; i <= NF; i++) {
+        line_len += length($i) + 1;
+        if (line_len >= 80) {
+            print line
+            line = $i;
+            line_len = length($i);
+        }else {
+            line = line " " $i;
+        }
+    }
+    print substr(line, 0, length(line));
+}' dodatkowe/lipsum.txt
